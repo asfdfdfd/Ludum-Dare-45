@@ -10,8 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3112976036536533293}
   - component: {fileID: 793241097757973650}
-  - component: {fileID: 7676330813353943904}
   - component: {fileID: 3039687383480126885}
+  - component: {fileID: -6862884732816274132}
+  - component: {fileID: -7692283662564467415}
+  - component: {fileID: 2610995784304460559}
   m_Layer: 0
   m_Name: Bandit Ceiling Shooter Bullet
   m_TagString: Untagged
@@ -82,22 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &7676330813353943904
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160366521654475594}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.00021067858}
-  serializedVersion: 2
-  m_Radius: 0.0068398444
 --- !u!114 &3039687383480126885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,3 +96,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b658e632c54460fb8d98b3857a2d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6862884732816274132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160366521654475594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3c7c034dce144daf8543241e0cbf3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &-7692283662564467415
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160366521654475594}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 5
+--- !u!60 &2610995784304460559
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160366521654475594}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.57, y: 0.38}
+    newSize: {x: 0.02, y: 0.02}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.205, y: 0.099999994}
+      - {x: -0.13499999, y: 0.14}
+      - {x: -0.195, y: 0.19}
+      - {x: -0.285, y: 0.19}
+      - {x: -0.285, y: -0.14999999}
+      - {x: -0.145, y: -0.19}
+      - {x: 0.195, y: -0.19}
+      - {x: 0.285, y: -0.04}
+      - {x: 0.285, y: 0.07}

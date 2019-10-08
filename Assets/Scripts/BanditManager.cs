@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class BanditManager : MonoBehaviour
 {
-    private const float BANDIT_SPAWN_TIME = 2.0f;
+    private const float BANDIT_SPAWN_TIME_MAX = 3.0f;
+    private const float BANDIT_SPAWN_TIME_MIN = 2.0f;
 
-    private static readonly int BANDIT_TOUGH_SPAWN_COUNTER = 0; // 5
-    private static readonly float BANDIT_TOUGH_SPAWN_PROBABILITY = 0.0f;//0.7f;
+    private static readonly int BANDIT_TOUGH_SPAWN_COUNTER = 5;
+    private static readonly float BANDIT_TOUGH_SPAWN_PROBABILITY = 0.7f;
 
-    private float banditSpawnTimer = BANDIT_SPAWN_TIME;
+    private float banditSpawnTimeReduceSpeed = 0.03f;
+    private float banditSpawnTime = BANDIT_SPAWN_TIME_MAX;
+    private float banditSpawnTimer = BANDIT_SPAWN_TIME_MAX;
 
     private int banditToughSpawnCounter = BANDIT_TOUGH_SPAWN_COUNTER;
 
@@ -19,8 +22,14 @@ public class BanditManager : MonoBehaviour
     private GameObject prefabBanditTough;
     private GameObject prefabBanditCeillingShooter;
 
+    private GameObject bandits;
+
+    private bool isFinished = false;
+
     void Start()
     {
+        bandits = GameObject.Find("Bandits");
+
         prefabBandit = Resources.Load<GameObject>("Prefabs/Bandit Simple 1");
         prefabBanditTough = Resources.Load<GameObject>("Prefabs/Bandit Tough");
         prefabBanditCeillingShooter = Resources.Load<GameObject>("Prefabs/Bandit Ceiling Shooter");
@@ -30,11 +39,19 @@ public class BanditManager : MonoBehaviour
 
     void Update()
     {
-        banditSpawnTimer -= Time.deltaTime;
-        if (banditSpawnTimer <= 0)
+        if (!isFinished)
         {
-            SpawnBandit();
-            banditSpawnTimer += BANDIT_SPAWN_TIME;
+            banditSpawnTimer -= Time.deltaTime;
+            if (banditSpawnTimer <= 0)
+            {
+                SpawnBandit();
+                banditSpawnTimer += banditSpawnTime;
+            }
+            banditSpawnTime -= Time.deltaTime * banditSpawnTimeReduceSpeed;
+            if (banditSpawnTime < BANDIT_SPAWN_TIME_MIN)
+            {
+                banditSpawnTime = BANDIT_SPAWN_TIME_MIN;
+            }
         }
     }
 
@@ -46,11 +63,11 @@ public class BanditManager : MonoBehaviour
         {
             banditToughSpawnCounter = BANDIT_TOUGH_SPAWN_COUNTER;
 
-            gameObjectBandit = Instantiate(prefabBanditTough);
+            gameObjectBandit = Instantiate(prefabBanditTough, bandits.transform);
         }
         else
         {
-            gameObjectBandit = Instantiate(prefabBandit);
+            gameObjectBandit = Instantiate(prefabBandit, bandits.transform);
         }
 
         EnemyMovable enemyMovable = gameObjectBandit.GetComponent<EnemyMovable>();
@@ -74,11 +91,42 @@ public class BanditManager : MonoBehaviour
 
     private IEnumerator BanditCeilingShooterSpawnCoroutine()
     {
-        while (true)
+        while (!isFinished)
         {
             GameObject banditCeilingshooter = Instantiate(prefabBanditCeillingShooter);
+            banditCeilingshooter.transform.position = new Vector3(Random.value * 10.0f - 5, 4.6f, 0);
             yield return new WaitForSeconds(5);
-            Destroy(banditCeilingshooter);
         }
+    }
+
+    public IEnumerator SwitchToTheBossFightCoroutine()
+    {
+        isFinished = true;
+
+        for (int i = 0; i < bandits.transform.childCount; i++)
+        {
+            var child = bandits.transform.GetChild(i);
+            ShutOffBandit(child.gameObject);
+        }
+
+        yield return new WaitForSeconds(5);
+    }
+
+    private void ShutOffBandit(GameObject gameObject)
+    {
+        Destroy(gameObject.GetComponent<Rigidbody2D>());
+        Destroy(gameObject.GetComponent<PolygonCollider2D>());
+        Destroy(gameObject.GetComponent<EnemyMovable>());
+
+        var position = gameObject.transform.position;
+
+        LeanTween.sequence()
+            .append(LeanTween.moveX(gameObject, position.x + 0.1f, 0.1f))
+            .append(LeanTween.moveX(gameObject, position.x - 0.1f, 0.05f))
+            .append(LeanTween.moveX(gameObject, position.x + 0.1f, 0.1f))
+            .append(LeanTween.moveX(gameObject, position.x - 0.1f, 0.05f))
+            .append(LeanTween.moveX(gameObject, position.x, 0.1f));
+
+        LeanTween.moveY(gameObject, -5, 5).setDestroyOnComplete(true);
     }
 }

@@ -8,6 +8,15 @@ public class EnemyMovable : MonoBehaviour
 
     void Awake()
     {
+        if (Random.Range(0, 10) < 2)
+        {
+            banditSpeed = 5.0f;
+        }
+        else
+        {
+            banditSpeed = Random.Range(1.0f, 2.0f);
+        }
+
         currentSpeed = banditSpeed;
     }
 

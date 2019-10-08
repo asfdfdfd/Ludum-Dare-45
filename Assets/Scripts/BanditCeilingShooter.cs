@@ -27,6 +27,8 @@ public class BanditCeilingShooter : MonoBehaviour
         // TODO: Random amount of waves
         yield return new WaitForSeconds(fallTime);
         LeanTween.moveY(gameObject, startY, fallTime).setEaseOutBack();
+        yield return new WaitForSeconds(fallTime);
+        Destroy(gameObject);
     }
 
     private void Shoot()
@@ -35,15 +37,19 @@ public class BanditCeilingShooter : MonoBehaviour
         var bulletTraceLength = 3.6f * 2f;
 
         GameObject bulletCenter = Instantiate(prefabBullet);
-        GameObject bulletLeft = Instantiate(prefabBullet);
-        GameObject bulletRight = Instantiate(prefabBullet);
+        //GameObject bulletLeft = Instantiate(prefabBullet);
+        //GameObject bulletRight = Instantiate(prefabBullet);
 
+        Vector2 sourceCenter = new Vector3(transform.position.x, transform.position.y);
         Vector2 targetCenter = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - bulletTraceLength);
-        Vector2 targetLeft = new Vector2(gameObject.transform.position.x - bulletTraceLength, gameObject.transform.position.y - bulletTraceLength);
-        Vector2 targetRight = new Vector2(gameObject.transform.position.x + bulletTraceLength, gameObject.transform.position.y - bulletTraceLength);
+        //Vector2 targetLeft = new Vector2(gameObject.transform.position.x - bulletTraceLength, gameObject.transform.position.y - bulletTraceLength);
+        //Vector2 targetRight = new Vector2(gameObject.transform.position.x + bulletTraceLength, gameObject.transform.position.y - bulletTraceLength);
 
+        bulletCenter.transform.position = sourceCenter;
         LeanTween.move(bulletCenter, targetCenter, bulletFlyTime).setDestroyOnComplete(true);
-        LeanTween.move(bulletLeft, targetLeft, bulletFlyTime).setDestroyOnComplete(true);
-        LeanTween.move(bulletRight, targetRight, bulletFlyTime).setDestroyOnComplete(true);
+
+        GetComponent<AudioSource>().Play();
+        //LeanTween.move(bulletLeft, targetLeft, bulletFlyTime).setDestroyOnComplete(true);
+        //LeanTween.move(bulletRight, targetRight, bulletFlyTime).setDestroyOnComplete(true);
     }
 }
